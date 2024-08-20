@@ -1,0 +1,28 @@
+openapi: 3.0.3
+info:
+  title: STD23080 - TD1
+  version: 1.0.0
+servers:
+  - url: https://localhost.std23080.com
+paths:
+  /customers:
+    get:
+      description: Returns list of all customers
+      responses:
+        '200':
+          description: list of all customers
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/customer'
+components:
+  schemas:
+   customer:
+      type: object
+      properties:
+        name:
+          type: string
+        yearsOld:
+          type: integer
