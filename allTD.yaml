@@ -1,0 +1,301 @@
+openapi: 3.0.3
+info:
+  title: STD23080 - TD1
+  version: 1.0.0
+servers:
+  - url: https://localhost.std23080.com
+paths:
+  /customers:
+    get:
+      description: Returns list of all customers
+      parameters:
+        - name: page
+          in: query
+          required: true
+          schema: 
+            type: integer
+      responses:
+        '200':
+          description: list of all customers
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/customer'
+    post:
+      description: Add a list of customers
+      requestBody:
+        description: customers to add
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/addedCustomer'
+        required: true
+      responses:
+        '200':
+          description: list of all customers added
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/customer'
+    put:
+      description: Modify customer properties
+      requestBody:
+        description: customer properties to add
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/customer'
+        required: true        
+      responses:
+        '200':
+          description : list of modified customers
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref: '#/components/schemas/customer'
+    delete:
+      description: delete some customers
+      requestBody:
+        description: customer id to delete
+        content:
+          application/json:
+            schema:
+              type: array
+              items: 
+                $ref: '#/components/schemas/customerWithIdOnly'
+        required: true        
+      responses:
+        '200':
+          description: alkjsdfl
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref : '#/components/schemas/customer'
+    patch:
+      description: modify one customer property 
+      requestBody:
+        description: customer property to modify
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/customer'
+      responses:
+        '200':
+          description: list of modified customers
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref: '#/components/schemas/customer'
+  /meals:
+    get:
+      description: Returns list of all meals
+      parameters:
+        - name: page
+          in: query
+          required: false
+          schema: 
+            type: integer
+      responses:
+        '200':
+          description: list of all meals
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/meal'
+    post:
+      description: Add a list of meals
+      requestBody:
+        description: meal to add
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/addedMeal'
+        required: true
+      responses:
+        '200':
+          description: list of all meals added
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/meal'
+    put:
+      description: Modify meal properties
+      requestBody:
+        description: meal properties to add
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/meal'
+        required: true        
+      responses:
+        '200':
+          description : list of modified meals
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref: '#/components/schemas/meal'
+    delete:
+      description: delete some meals
+      requestBody:
+        description: meal id to delete
+        content:
+          application/json:
+            schema:
+              type: array
+              items: 
+                $ref: '#/components/schemas/mealWithIdOnly'
+        required: true        
+      responses:
+        '200':
+          description: list of all meals deleted
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref : '#/components/schemas/meal'
+    patch:
+      description: modify one meal property 
+      requestBody:
+        description: meal property to modify
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/meal'  
+      responses:
+        '200':
+          description: list of all meals modified
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/meal'
+  /customer/{customerId}/orders:
+    get:
+      description : list of one customer orders 
+      parameters:
+        - name: customerId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: list of all customer orders
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref: '#/components/schemas/order'
+    post:
+      description: add order of one customer
+      parameters:
+        - name: customerId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody: 
+        description: order to add
+        content:
+          application/json:
+            schema:
+              type: array
+              items: 
+                $ref: '#/components/schemas/addedOrder'
+        required: true        
+      responses:
+        '200':
+          description: list of added orders
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/order'
+components:
+  schemas:
+    customer:
+      allOf:
+        - $ref: '#/components/schemas/customerWithIdOnly'
+        - $ref: '#/components/schemas/addedCustomer'
+    addedCustomer:
+      type: object
+      properties:
+        name:
+          type: string
+        yearsOld:
+          type: integer
+    customerWithIdOnly:
+      type: object
+      properties:
+        id:
+          type: string
+    meal:
+      allOf: 
+        - $ref: '#/components/schemas/mealWithIdOnly'
+        - $ref: '#/components/schemas/addedMeal'
+        
+    addedMeal:
+      type: object
+      properties:
+        name:
+          type: string
+        price: 
+          type: number
+          format: float
+    mealWithIdOnly:
+      type: object
+      properties:
+        id: 
+          type: string
+    order:
+      type: object
+      properties:
+        reference:
+          type: string
+        allOf:
+           $ref: '#/components/schemas/addedOrder'
+    addedOrder:
+      type: object
+      properties:
+        meals:
+          type: array
+          items : 
+            $ref: '#/components/schemas/meal'
+        orderDateTime:  
+          type: string
+          format: date-time
+      
+          
+          
